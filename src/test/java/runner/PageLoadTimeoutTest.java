@@ -4,13 +4,12 @@ import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.net.MalformedURLException;
 import java.util.concurrent.TimeUnit;
 
 public class PageLoadTimeoutTest {
 
     @Test
-    public void test() throws MalformedURLException {
+    public void test() {
         System.setProperty("webdriver.gecko.driver", "src\\test\\resources\\browserBinaries\\geckodriver.exe");
         WebDriver browser = new FirefoxDriver();
         browser.manage().timeouts().pageLoadTimeout(10, TimeUnit.SECONDS);
