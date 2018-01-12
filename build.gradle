@@ -1,3 +1,15 @@
+import net.masterthought.cucumber.*;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {classpath 'net.masterthought:cucumber-reporting:3.13.0'}
+}
 group 'com.practise'
 version '0.0.1'
 
@@ -16,7 +28,6 @@ dependencies {
     compile group: 'info.cukes', name: 'cucumber-junit', version: '1.2.5'
     compile group: 'info.cukes', name: 'cucumber-picocontainer', version: '1.2.5'
     compile group: 'org.picocontainer', name: 'picocontainer', version: '2.15'
-    compile group: 'net.masterthought', name: 'cucumber-reporting', version: '3.12.0'
     compile group: 'com.github.mkolisnyk', name: 'cucumber-runner', version: '1.3'
     compile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'com.aventstack', name: 'extentreports', version: '3.1.2'
@@ -25,6 +36,31 @@ dependencies {
 
 test {
     outputs.upToDateWhen { false }
+    doLast {
+        File reportOutputDirectory = new File("results");
+        if (!reportOutputDirectory.exists())
+            return;
+        List<String> jsonFiles = new ArrayList<>();
+        for (File directory :
+                reportOutputDirectory.listFiles()) {
+            if (directory.isDirectory()) {
+                File jsonFile = new File(directory.getAbsolutePath() + File.separator + "cucumber.json");
+                if (jsonFile.exists())
+                    jsonFiles.add(jsonFile.getAbsolutePath());
+            }
+        }
+        String buildNumber = "1";
+        String projectName = "cucumberProject";
+        Configuration configuration = new Configuration(reportOutputDirectory, projectName);
+        configuration.setParallelTesting(true);
+        configuration.setRunWithJenkins(true);
+        configuration.setBuildNumber(buildNumber);
+        configuration.addClassifications("Platform", "Windows");
+        configuration.addClassifications("Browser", "Chrome");
+        configuration.addClassifications("Branch", "release/1.0");
+        ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
+        reportBuilder.generateReports();
+    }
     /*useTestNG() {
         suites 'src/test/resources/testng.xml'
     }*/
