@@ -20,8 +20,12 @@ dependencies {
     compile group: 'com.github.mkolisnyk', name: 'cucumber-runner', version: '1.3'
     compile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'com.aventstack', name: 'extentreports', version: '3.1.2'
+    compile group: 'org.testng', name: 'testng', version: '6.9.10'
 }
 
 test {
     outputs.upToDateWhen { false }
+    /*useTestNG() {
+        suites 'src/test/resources/testng.xml'
+    }*/
 }

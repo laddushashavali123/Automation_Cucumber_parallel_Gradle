@@ -1,6 +1,6 @@
-Feature: Cucumber Spring feature test flipkart
+Feature: Cucumber Picocontainer feature test flipkart
 
-  Scenario Template: sample scenario
+  Scenario Template: Flipkart cuke test scenario
     Given user launches "CHROME" browser
     Then user opens "flipkart" app
     And user searches for "<item>"

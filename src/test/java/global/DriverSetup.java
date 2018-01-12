@@ -72,6 +72,7 @@ public class DriverSetup {
             case CHROME: {
                 System.setProperty("webdriver.chrome.driver", "src\\test\\resources\\browserBinaries\\chromedriver.exe");
                 browser = new ChromeDriver();
+                browser.manage().timeouts().pageLoadTimeout(configuration.maxtimeout, TimeUnit.SECONDS);
                 break;
             }
             default: {

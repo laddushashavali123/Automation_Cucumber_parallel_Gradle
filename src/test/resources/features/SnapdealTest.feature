@@ -1,6 +1,6 @@
-Feature: Cucumber guice feature test for Snapdeal
+Feature: Cucumber Picocontainer feature test snapdeal
 
-  Scenario Template: Snapdeal test scenario
+  Scenario Template: Snapdeal cuke test scenario
     Given user launches "FIREFOX" browser
     Then user opens "snapdeal" app
     And user searches for "<item>"

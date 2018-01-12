@@ -1,8 +1,5 @@
 package stepdefs;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
-import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -11,12 +8,13 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import global.Configuration;
 import global.DriverSetup;
+import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
-import steps.AmazonPageObject;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import steps.ShopCluesPageObject;
 import steps.FlipkartPageObject;
 import steps.SnapdealPageObject;
-import util.CustomCucumberListner;
 
 /**
  * Created by mrunal on 7/16/2017.
@@ -26,16 +24,16 @@ public class CommonStepDefs {
 
     private DriverSetup driverSetup;
     private Configuration configuration;
-    private ExtentReports extentReports;
+//    private ExtentReports extentReports;
     private FlipkartPageObject flipkartPageObject;
-    private AmazonPageObject amazonPageObject;
+    private ShopCluesPageObject shopcluesPageObject;
     private SnapdealPageObject snapdealPageObject;
     private Scenario scenario;
     private String application;
     @Before
     public void before(Scenario scenario) {
         this.scenario = scenario;
-        if(extentReports==null) {
+        /*if(extentReports==null) {
             extentReports=new ExtentReports();
             ExtentHtmlReporter extentHtmlReporter=new ExtentHtmlReporter("Extentreport.html");
             extentHtmlReporter.config().setChartVisibilityOnOpen(true);
@@ -45,19 +43,22 @@ public class CommonStepDefs {
             extentReports.attachReporter(extentHtmlReporter);
             extentHtmlReporter.setAppendExisting(true);
             CustomCucumberListner.setExtentReports(extentReports);
-        }
+        }*/
     }
 
     @After
     public void after() {
-        extentReports.flush();
+        /*if(driverSetup.getBrowser()!=null) {
+            driverSetup.closeBrowser();*/
+//        extentReports.flush();
+//        }
     }
 
-    public CommonStepDefs(DriverSetup driverSetup, Configuration configuration, FlipkartPageObject flipkartPageObject, AmazonPageObject amazonPageObject, SnapdealPageObject snapdealPageObject) {
+    public CommonStepDefs(DriverSetup driverSetup, Configuration configuration, FlipkartPageObject flipkartPageObject, ShopCluesPageObject shopcluesPageObject, SnapdealPageObject snapdealPageObject) {
         this.driverSetup = driverSetup;
         this.configuration = configuration;
         this.flipkartPageObject = flipkartPageObject;
-        this.amazonPageObject = amazonPageObject;
+        this.shopcluesPageObject = shopcluesPageObject;
         this.snapdealPageObject = snapdealPageObject;
     }
 
@@ -74,11 +75,12 @@ public class CommonStepDefs {
     public void openApp(String appName) {
         this.application = appName;
         switch (appName) {
-            case "amazon":
-                driverSetup.getBrowser().get(configuration.amazonurl);
+            case "shopclues":
+                driverSetup.getBrowser().get(configuration.shopclues);
                 break;
             case "flipkart":
                 driverSetup.getBrowser().get(configuration.flipkarturl);
+                driverSetup.getWait().until(ExpectedConditions.presenceOfElementLocated(By.xpath(".//span[text()='Login']//ancestor::div[./button[not(@type)]]/button"))).click();
                 break;
             case "snapdeal":
                 driverSetup.getBrowser().get(configuration.snapdealurl);
@@ -92,7 +94,7 @@ public class CommonStepDefs {
     public void search(String searchText) {
         switch (application) {
             case "amazon":
-                amazonPageObject.search(searchText);
+                shopcluesPageObject.search(searchText);
                 break;
             case "flipkart":
                 flipkartPageObject.search(searchText);
@@ -108,7 +110,6 @@ public class CommonStepDefs {
     @Then("^user takes screen shot of the results$")
     public void takeScreenShot() {
         scenario.embed(((TakesScreenshot) driverSetup.getBrowser()).getScreenshotAs(OutputType.BYTES), "image/JPEG");
-
     }
 
     @And("^closes the browser$")

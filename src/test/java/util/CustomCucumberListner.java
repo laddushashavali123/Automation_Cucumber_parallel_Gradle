@@ -1,27 +1,43 @@
 package util;
 
 import com.aventstack.extentreports.*;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import gherkin.formatter.Formatter;
 import gherkin.formatter.Reporter;
 import gherkin.formatter.model.*;
 
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import java.net.URL;
+import java.util.*;
 
 public class CustomCucumberListner implements Formatter, Reporter {
 
-    private static ExtentReports extentReports;
-    public static ExtentTest testFeature;
-    public static ExtentTest testScenario;
+    private ExtentReports extentReports;
+    private ExtentTest testFeature;
+    private ExtentTest testScenario;
     public static ExtentTest testStep;
     private Queue<Step> testSteps = new LinkedList<>();
     private Feature currentFeature;
     private boolean isScenarioStarted = false;
+    private Map<Thread, CustomCucumberListner> map=new LinkedHashMap<>();
 
-    public static void setExtentReports(ExtentReports extentReports) {
-        CustomCucumberListner.extentReports = extentReports;
+    public CustomCucumberListner(URL someParameter) {
+        System.out.println("Listener Object: "+this);
+        System.out.println("Thread Object: "+Thread.currentThread().getId());
+        map.put(Thread.currentThread(), this);
+        extentReports=new ExtentReports();
+        ExtentHtmlReporter extentHtmlReporter=new ExtentHtmlReporter(someParameter.getFile());
+        extentHtmlReporter.config().setChartVisibilityOnOpen(true);
+        extentHtmlReporter.config().setTestViewChartLocation(ChartLocation.TOP);
+        extentHtmlReporter.config().setDocumentTitle("Test Tile");
+        extentHtmlReporter.config().setReportName("Test Report");
+        extentReports.attachReporter(extentHtmlReporter);
+        extentHtmlReporter.setAppendExisting(true);
     }
+
+    /*public static void setExtentReports(ExtentReports extentReports) {
+        CustomCucumberListner.extentReports = extentReports;
+    }*/
 
     @Override
     public void syntaxError(String state, String event, List<String> legalEvents, String uri, Integer line) {
@@ -67,6 +83,7 @@ public class CustomCucumberListner implements Formatter, Reporter {
         System.out.println("Start of scenario");
         isScenarioStarted = true;
         try {
+            System.out.println("==>"+scenario.getName());
             testScenario = testFeature.createNode(new GherkinKeyword("Scenario"), scenario.getName());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -100,6 +117,7 @@ public class CustomCucumberListner implements Formatter, Reporter {
     @Override
     public void eof() {
         System.out.println("EOF");
+        extentReports.flush();
         testFeature=null;
     }
 

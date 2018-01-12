@@ -15,19 +15,20 @@ import java.util.List;
  * Created by mrunal on 7/16/2017.
  */
 @RunWith(Cucumber.class)
-@CucumberOptions(features = "src/test/resources/features/", glue = "stepdefs", plugin = {"html:results/cucumber-html-report", "util.CustomCucumberListner"}, tags = {"~@Ignore"})
+@CucumberOptions(features = "src/test/resources/features/ShopCluesTest.feature", glue = "stepdefs",
+        plugin = {"html:cucumberResults/cucumber-html-report", "json:cucumberResults/cucumber.json", "util.CustomCucumberListner:ExtentReport.html"}, tags = {"~@Ignore"})
 public class JUnitRunner {
 
     @AfterClass
     public static void afterClass() {
-        File reportOutputDirectory = new File("results");
+        File reportOutputDirectory = new File("cucumberResults");
         List<String> jsonFiles = new ArrayList<>();
-        jsonFiles.add("results/cucumber.json");
+        jsonFiles.add("cucumberResults/cucumber.json");
         String buildNumber = "1";
         String projectName = "cucumberProject";
         Configuration configuration = new Configuration(reportOutputDirectory, projectName);
         configuration.setParallelTesting(false);
-        configuration.setRunWithJenkins(false);
+        configuration.setRunWithJenkins(true);
         configuration.setBuildNumber(buildNumber);
         configuration.addClassifications("Platform", "Windows");
         configuration.addClassifications("Browser", "Chrome");
