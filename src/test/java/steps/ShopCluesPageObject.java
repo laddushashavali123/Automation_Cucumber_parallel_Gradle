@@ -11,11 +11,9 @@ import util.LocatorUtils;
 public class ShopCluesPageObject {
 
     private By searchBox = By.id("autocomplete");
-    private DriverSetup driverSetup;
     private LocatorUtils locatorUtils;
 
-    public ShopCluesPageObject(DriverSetup driverSetup, LocatorUtils locatorUtils) {
-        this.driverSetup = driverSetup;
+    public ShopCluesPageObject(LocatorUtils locatorUtils) {
         this.locatorUtils = locatorUtils;
     }
     public void search(String searchText) {

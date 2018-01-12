@@ -93,7 +93,7 @@ public class CommonStepDefs {
     @Then("^user searches for \"([^\"]*)\"$")
     public void search(String searchText) {
         switch (application) {
-            case "amazon":
+            case "shopclues":
                 shopcluesPageObject.search(searchText);
                 break;
             case "flipkart":

@@ -1,5 +1,5 @@
 @new
-Feature: Cucumber Picocontainer feature test amazon
+Feature: Cucumber Picocontainer feature test shopclues
 
   Scenario Template: ShopClues cuke test scenario
     Given user launches "CHROME" browser
