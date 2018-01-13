@@ -32,6 +32,9 @@ public class DriverSetup {
     }
 
     public WebDriverWait getWait() {
+        if (wait == null) {
+            wait = new WebDriverWait(this.browser, configuration.maxtimeout, configuration.pollinginterval);
+        }
         return wait;
     }
 
@@ -40,10 +43,6 @@ public class DriverSetup {
     }
 
     public WebDriver initializeRemoteBrowser(BrowserType browserType) throws Exception {
-        /*System.setProperty("webdriver.gecko.driver", "src\\test\\resources\\browserBinaries\\geckodriver.exe");
-        System.setProperty("webdriver.chrome.driver", "src\\test\\resources\\browserBinaries\\chromedriver.exe");
-        seleniumGridUtil.startHub();
-        seleniumGridUtil.startNode();*/
         DesiredCapabilities desiredCapabilities;
         switch (browserType) {
             case FIREFOX:
@@ -72,7 +71,6 @@ public class DriverSetup {
             case CHROME: {
                 System.setProperty("webdriver.chrome.driver", "src\\test\\resources\\browserBinaries\\chromedriver.exe");
                 browser = new ChromeDriver();
-                browser.manage().timeouts().pageLoadTimeout(configuration.maxtimeout, TimeUnit.SECONDS);
                 break;
             }
             default: {
@@ -80,8 +78,7 @@ public class DriverSetup {
                 break;
             }
         }
-//        browser.manage().timeouts().pageLoadTimeout(configuration.maxtimeout, TimeUnit.SECONDS);
-        wait = new WebDriverWait(this.browser, configuration.maxtimeout, configuration.pollinginterval);
+        browser.manage().timeouts().pageLoadTimeout(configuration.maxtimeout, TimeUnit.SECONDS);
         return browser;
     }
 

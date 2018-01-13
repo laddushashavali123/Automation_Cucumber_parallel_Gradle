@@ -1,14 +1,11 @@
-import net.masterthought.cucumber.*;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import net.masterthought.cucumber.Configuration
+import net.masterthought.cucumber.ReportBuilder
 
 buildscript {
     repositories {
         mavenCentral()
     }
-    dependencies {classpath 'net.masterthought:cucumber-reporting:3.13.0'}
+    dependencies { classpath 'net.masterthought:cucumber-reporting:3.13.0' }
 }
 group 'com.practise'
 version '0.0.1'
@@ -36,6 +33,18 @@ dependencies {
 
 test {
     outputs.upToDateWhen { false }
+    doFirst {
+        File reportOutputDirectory = new File("results");
+        if (reportOutputDirectory.exists())
+            reportOutputDirectory.deleteDir();
+        Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe")
+        Runtime.getRuntime().exec("taskkill /F /IM geckodriver.exe")
+        /*hub = Runtime.getRuntime().exec("java -jar src/test/resources/selenium-server-standalone-3.8.1.jar -role hub -maxSession 10 -newSessionWaitTimeout 5000 -timeout 180 -browserTimeout 60 -cleanUpCycle 5000");
+        Thread.sleep(4000);
+        node = Runtime.getRuntime().exec("java -Dwebdriver.chrome.driver=\"src/test/resources/browserBinaries/chromedriver.exe\" -Dwebdriver.gecko.driver=\"src/test/resources/browserBinaries/geckodriver.exe\" -jar src/test/resources/selenium-server-standalone-3.8.1.jar -role node -hub http://mrunal-laptop:4444/grid/register -maxSession 10 -capabilities \"browserName=firefox, maxInstances=10\" -capabilities \"browserName=chrome, maxInstances=10\"")
+        Thread.sleep(4000);*/
+    }
+
     doLast {
         File reportOutputDirectory = new File("results");
         if (!reportOutputDirectory.exists())

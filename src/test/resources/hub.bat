@@ -1,0 +1,1 @@
+java -jar selenium-server-standalone-3.8.1.jar -role hub -maxSession 10 -newSessionWaitTimeout 5000 -timeout 180 -browserTimeout 60 -cleanUpCycle 5000
