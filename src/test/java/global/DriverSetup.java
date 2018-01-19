@@ -1,5 +1,6 @@
 package global;
 
+import com.aventstack.extentreports.ExtentTest;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -16,15 +17,17 @@ import java.util.concurrent.TimeUnit;
  */
 public class DriverSetup {
 
-    //    @Inject
+    public enum BrowserType {
+        FIREFOX, CHROME, IE
+    }
+
     private Configuration configuration;
     private WebDriver browser;
     private WebDriverWait wait;
-//    private SeleniumGridUtil seleniumGridUtil;
+    private ExtentTest extentTest;
 
-    public DriverSetup(Configuration configuration) { //, SeleniumGridUtil seleniumGridUtil
+    public DriverSetup(Configuration configuration) {
         this.configuration = configuration;
-//        this.seleniumGridUtil = seleniumGridUtil;
     }
 
     public WebDriver getBrowser() {
@@ -38,8 +41,14 @@ public class DriverSetup {
         return wait;
     }
 
-    public enum BrowserType {
-        FIREFOX, CHROME, IE
+    public void registerExtentTest(ExtentTest extentTest) {
+        this.extentTest = extentTest;
+    }
+
+    public void log(String message) {
+        if (extentTest != null) {
+            extentTest.debug(message);
+        }
     }
 
     public WebDriver initializeRemoteBrowser(BrowserType browserType) throws Exception {
@@ -58,6 +67,8 @@ public class DriverSetup {
                 desiredCapabilities = DesiredCapabilities.firefox();
         }
         browser = new RemoteWebDriver(new URL(configuration.getProperty("hubURL")), desiredCapabilities);
+        browser.manage().timeouts().pageLoadTimeout(configuration.maxtimeout, TimeUnit.SECONDS);
+        log("Launched [" + browserType + "] browser on Remote Web Driver.");
         return browser;
     }
 
@@ -79,10 +90,12 @@ public class DriverSetup {
             }
         }
         browser.manage().timeouts().pageLoadTimeout(configuration.maxtimeout, TimeUnit.SECONDS);
+        log("Launched [" + browserType + "] browser.");
         return browser;
     }
 
     public void closeBrowser() {
         getBrowser().close();
+        log("Successfully closed browser.");
     }
 }

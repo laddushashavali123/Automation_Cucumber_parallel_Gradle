@@ -1,5 +1,6 @@
 package stepdefs;
 
+import com.github.mkolisnyk.cucumber.runner.AfterSuite;
 import cucumber.api.Scenario;
 import cucumber.api.java.After;
 import cucumber.api.java.Before;
@@ -8,6 +9,7 @@ import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
 import global.Configuration;
 import global.DriverSetup;
+import global.WorldObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -15,6 +17,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import steps.ShopCluesPageObject;
 import steps.FlipkartPageObject;
 import steps.SnapdealPageObject;
+import util.CustomCucumberListner;
 
 /**
  * Created by mrunal on 7/16/2017.
@@ -24,39 +27,23 @@ public class CommonStepDefs {
 
     private DriverSetup driverSetup;
     private Configuration configuration;
-//    private ExtentReports extentReports;
+    private WorldObject worldObject;
     private FlipkartPageObject flipkartPageObject;
     private ShopCluesPageObject shopcluesPageObject;
     private SnapdealPageObject snapdealPageObject;
     private Scenario scenario;
     private String application;
+
     @Before
     public void before(Scenario scenario) {
         this.scenario = scenario;
-        /*if(extentReports==null) {
-            extentReports=new ExtentReports();
-            ExtentHtmlReporter extentHtmlReporter=new ExtentHtmlReporter("Extentreport.html");
-            extentHtmlReporter.config().setChartVisibilityOnOpen(true);
-            extentHtmlReporter.config().setTestViewChartLocation(ChartLocation.TOP);
-            extentHtmlReporter.config().setDocumentTitle("Test Tile");
-            extentHtmlReporter.config().setReportName("Test Report");
-            extentReports.attachReporter(extentHtmlReporter);
-            extentHtmlReporter.setAppendExisting(true);
-            CustomCucumberListner.setExtentReports(extentReports);
-        }*/
+        worldObject.setCucumberTestListener(CustomCucumberListner.map.get(Thread.currentThread()));
     }
 
-    @After
-    public void after() {
-        /*if(driverSetup.getBrowser()!=null) {
-            driverSetup.closeBrowser();*/
-//        extentReports.flush();
-//        }
-    }
-
-    public CommonStepDefs(DriverSetup driverSetup, Configuration configuration, FlipkartPageObject flipkartPageObject, ShopCluesPageObject shopcluesPageObject, SnapdealPageObject snapdealPageObject) {
-        this.driverSetup = driverSetup;
-        this.configuration = configuration;
+    public CommonStepDefs(WorldObject worldObject, FlipkartPageObject flipkartPageObject, ShopCluesPageObject shopcluesPageObject, SnapdealPageObject snapdealPageObject) {
+        this.worldObject = worldObject;
+        this.driverSetup = worldObject.getDriverSetup();
+        this.configuration = worldObject.getConfiguration();
         this.flipkartPageObject = flipkartPageObject;
         this.shopcluesPageObject = shopcluesPageObject;
         this.snapdealPageObject = snapdealPageObject;
@@ -64,7 +51,7 @@ public class CommonStepDefs {
 
     @Given("^user launches \"([^\"]*)\" browser$")
     public void launchesBrowser(DriverSetup.BrowserType browserName) throws Exception {
-        if(Boolean.valueOf(configuration.getProperty("useGrid"))) {
+        if (Boolean.valueOf(configuration.getProperty("useGrid"))) {
             driverSetup.initializeRemoteBrowser(browserName);
         } else {
             driverSetup.initializeBrowser(browserName);
@@ -88,6 +75,7 @@ public class CommonStepDefs {
             default:
                 break;
         }
+        worldObject.getExtentTest().pass("Successfully opened " + appName + " shopping portal.");
     }
 
     @Then("^user searches for \"([^\"]*)\"$")
@@ -110,6 +98,7 @@ public class CommonStepDefs {
     @Then("^user takes screen shot of the results$")
     public void takeScreenShot() {
         scenario.embed(((TakesScreenshot) driverSetup.getBrowser()).getScreenshotAs(OutputType.BYTES), "image/JPEG");
+        worldObject.getExtentTest().pass("Successfully taken screen shot.");
     }
 
     @And("^closes the browser$")

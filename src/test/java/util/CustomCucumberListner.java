@@ -7,37 +7,25 @@ import gherkin.formatter.Formatter;
 import gherkin.formatter.Reporter;
 import gherkin.formatter.model.*;
 
+import java.io.File;
 import java.net.URL;
 import java.util.*;
 
 public class CustomCucumberListner implements Formatter, Reporter {
 
-    private ExtentReports extentReports;
+    public static final ExtentReports extentReports = new ExtentReports();
     private ExtentTest testFeature;
     private ExtentTest testScenario;
-    public static ExtentTest testStep;
+    private ExtentTest testStep;
     private Queue<Step> testSteps = new LinkedList<>();
-    private Feature currentFeature;
     private boolean isScenarioStarted = false;
-    private Map<Thread, CustomCucumberListner> map=new LinkedHashMap<>();
+    public static Map<Thread, CustomCucumberListner> map = new LinkedHashMap<>();
 
-    public CustomCucumberListner(URL someParameter) {
-        System.out.println("Listener Object: "+this);
-        System.out.println("Thread Object: "+Thread.currentThread().getId());
-        map.put(Thread.currentThread(), this);
-        extentReports=new ExtentReports();
-        ExtentHtmlReporter extentHtmlReporter=new ExtentHtmlReporter(someParameter.getFile());
-        extentHtmlReporter.config().setChartVisibilityOnOpen(true);
-        extentHtmlReporter.config().setTestViewChartLocation(ChartLocation.TOP);
-        extentHtmlReporter.config().setDocumentTitle("Test Tile");
-        extentHtmlReporter.config().setReportName("Test Report");
-        extentReports.attachReporter(extentHtmlReporter);
-        extentHtmlReporter.setAppendExisting(true);
+    public CustomCucumberListner() {
+        synchronized (CustomCucumberListner.class) {
+            map.put(Thread.currentThread(), this);
+        }
     }
-
-    /*public static void setExtentReports(ExtentReports extentReports) {
-        CustomCucumberListner.extentReports = extentReports;
-    }*/
 
     @Override
     public void syntaxError(String state, String event, List<String> legalEvents, String uri, Integer line) {
@@ -51,8 +39,9 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void feature(Feature feature) {
-        System.out.println("Feature");
-        currentFeature = feature;
+        synchronized (extentReports) {
+            testFeature = extentReports.createTest(feature.getName(), feature.getDescription());
+        }
     }
 
     @Override
@@ -77,13 +66,10 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void scenario(Scenario scenario) {
-        if(testFeature==null) {
-            testFeature = extentReports.createTest(currentFeature.getName(), currentFeature.getDescription());
-        }
         System.out.println("Start of scenario");
         isScenarioStarted = true;
         try {
-            System.out.println("==>"+scenario.getName());
+            System.out.println("==>" + scenario.getName());
             testScenario = testFeature.createNode(new GherkinKeyword("Scenario"), scenario.getName());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -111,14 +97,12 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void close() {
-        System.out.println("Close");
+
     }
 
     @Override
     public void eof() {
         System.out.println("EOF");
-        extentReports.flush();
-        testFeature=null;
     }
 
     @Override
@@ -152,6 +136,10 @@ public class CustomCucumberListner implements Formatter, Reporter {
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public ExtentTest getTestStep() {
+        return testStep;
     }
 
     @Override

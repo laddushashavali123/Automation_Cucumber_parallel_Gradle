@@ -1,23 +1,21 @@
 package steps;
 
 import global.DriverSetup;
+import global.WorldObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import util.LocatorUtils;
 
-public class SnapdealPageObject {
+public class SnapdealPageObject extends ShoppingWebSiteObject {
 
     private By searchBox = By.id("inputValEnter");
 
-    private DriverSetup driverSetup;
-    private LocatorUtils locatorUtils;
-
-    public SnapdealPageObject(DriverSetup driverSetup, LocatorUtils locatorUtils) {
-        this.driverSetup = driverSetup;
-        this.locatorUtils = locatorUtils;
+    public SnapdealPageObject(WorldObject worldObject) {
+        super(worldObject);
     }
 
     public void search(String searchText) {
         locatorUtils.getElement(searchBox).sendKeys(searchText, Keys.ENTER);
+        worldObject.getExtentTest().pass("[Snapdeal] Successfully searched for text: " + searchText);
     }
 }
