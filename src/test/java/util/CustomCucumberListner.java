@@ -66,10 +66,8 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void scenario(Scenario scenario) {
-        System.out.println("Start of scenario");
         isScenarioStarted = true;
         try {
-            System.out.println("==>" + scenario.getName());
             testScenario = testFeature.createNode(new GherkinKeyword("Scenario"), scenario.getName());
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -78,7 +76,6 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void step(Step step) {
-        System.out.println("Step");
         if (isScenarioStarted) {
             testSteps.add(step);
         }
@@ -86,13 +83,12 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void endOfScenarioLifeCycle(Scenario scenario) {
-        System.out.println("End of scenario");
         isScenarioStarted = false;
     }
 
     @Override
     public void done() {
-        System.out.println("Done");
+
     }
 
     @Override
@@ -102,18 +98,16 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void eof() {
-        System.out.println("EOF");
+
     }
 
     @Override
     public void before(Match match, Result result) {
-//        System.out.println("Before match");
+
     }
 
     @Override
     public void result(Result result) {
-        System.out.println("Result");
-        System.out.println("==>" + result.getStatus() + " " + result.getErrorMessage());
         if (result.getStatus().equalsIgnoreCase("skipped")) {
             testStep.skip("Step Ignored");
             testStep.skip(result.getError());
@@ -122,12 +116,11 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void after(Match match, Result result) {
-//        System.out.println("After match");
+
     }
 
     @Override
     public void match(Match match) {
-        System.out.println("At match");
         if (!isScenarioStarted)
             return;
         Step step = testSteps.poll();
