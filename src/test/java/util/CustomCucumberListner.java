@@ -1,19 +1,19 @@
 package util;
 
-import com.aventstack.extentreports.*;
-import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
-import com.aventstack.extentreports.reporter.configuration.ChartLocation;
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.GherkinKeyword;
 import gherkin.formatter.Formatter;
 import gherkin.formatter.Reporter;
 import gherkin.formatter.model.*;
+import runner.ExtendedCucumberRunnerTest;
 
-import java.io.File;
-import java.net.URL;
 import java.util.*;
 
 public class CustomCucumberListner implements Formatter, Reporter {
 
     public static final ExtentReports extentReports = new ExtentReports();
+    public static boolean isReporterStarted = false;
     private ExtentTest testFeature;
     private ExtentTest testScenario;
     private ExtentTest testStep;
@@ -39,6 +39,8 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void feature(Feature feature) {
+        if (!isReporterStarted)
+            return;
         synchronized (extentReports) {
             testFeature = extentReports.createTest(feature.getName(), feature.getDescription());
         }
@@ -66,6 +68,8 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void scenario(Scenario scenario) {
+        if (!isReporterStarted)
+            return;
         isScenarioStarted = true;
         try {
             testScenario = testFeature.createNode(new GherkinKeyword("Scenario"), scenario.getName());
@@ -76,6 +80,8 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void step(Step step) {
+        if (!isReporterStarted)
+            return;
         if (isScenarioStarted) {
             testSteps.add(step);
         }
@@ -83,6 +89,8 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void endOfScenarioLifeCycle(Scenario scenario) {
+        if (!isReporterStarted)
+            return;
         isScenarioStarted = false;
     }
 
@@ -108,6 +116,8 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void result(Result result) {
+        if (!isReporterStarted)
+            return;
         if (result.getStatus().equalsIgnoreCase("skipped")) {
             testStep.skip("Step Ignored");
             testStep.skip(result.getError());
@@ -121,6 +131,8 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void match(Match match) {
+        if (!isReporterStarted)
+            return;
         if (!isScenarioStarted)
             return;
         Step step = testSteps.poll();
