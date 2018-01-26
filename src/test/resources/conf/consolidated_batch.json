@@ -18,6 +18,10 @@
         {
           "path": "results/cucumber-usage-report.html",
           "title": "Usage Report"
+        },
+        {
+          "path": "results/cucumber-results-charts-report.html",
+          "title": "Coverage Report"
         }
       ],
       "reportSuffix": "main",

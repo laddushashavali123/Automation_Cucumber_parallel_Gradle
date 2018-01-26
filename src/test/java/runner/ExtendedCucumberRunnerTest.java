@@ -7,7 +7,6 @@ import cucumber.api.CucumberOptions;
 import org.junit.runner.RunWith;
 import util.CustomCucumberListner;
 
-
 @RunWith(ExtendedParallelCucumber.class)
 @ExtendedCucumberOptions(threadsCount = 3, outputFolder = "results/", jsonReport = "results/cucumber.json", retryCount = 1
         , detailedReport = true, detailedAggregatedReport = true, overviewReport = true, overviewChartsReport = true, featureOverviewChart = true, coverageReport = true,

@@ -10,7 +10,7 @@ import cucumber.api.CucumberOptions;
 import org.junit.runner.RunWith;
 import util.CustomCucumberListner;
 
-@RunWith(ExtendedParallelScenarioCucumber.class)
+//@RunWith(ExtendedParallelScenarioCucumber.class)
 @ExtendedCucumberOptions(threadsCount = 4, outputFolder = "results/", jsonReport = "results/cucumber.json", retryCount = 1
         , detailedReport = true, detailedAggregatedReport = true, overviewReport = true, overviewChartsReport = true, featureOverviewChart = true, coverageReport = true,
         consolidatedReport = true, consolidatedReportConfig = "src/test/resources/conf/consolidated_batch.json"
@@ -22,7 +22,7 @@ public class ExtendParallelScenarioRunnerTest {
     @BeforeSuite
     public static void setUp() {
         CustomCucumberListner.isReporterStarted = true;
-        ExtentHtmlReporter extentHtmlReporter = new ExtentHtmlReporter("ExtentReport.html");
+        ExtentHtmlReporter extentHtmlReporter = new ExtentHtmlReporter("results/ExtentReport.html");
         extentHtmlReporter.config().setChartVisibilityOnOpen(true);
         extentHtmlReporter.config().setTestViewChartLocation(ChartLocation.TOP);
         extentHtmlReporter.config().setDocumentTitle("Test Tile");
