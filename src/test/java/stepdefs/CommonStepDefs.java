@@ -10,6 +10,7 @@ import cucumber.api.java.en.Then;
 import global.Configuration;
 import global.DriverSetup;
 import global.WorldObject;
+import org.junit.Assert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -17,7 +18,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import steps.ShopCluesPageObject;
 import steps.FlipkartPageObject;
 import steps.SnapdealPageObject;
-import util.CustomCucumberListner;
+import util.CustomCucumberListener;
 
 /**
  * Created by mrunal on 7/16/2017.
@@ -37,7 +38,7 @@ public class CommonStepDefs {
     @Before
     public void before(Scenario scenario) {
         this.scenario = scenario;
-        worldObject.setCucumberTestListener(CustomCucumberListner.map.get(Thread.currentThread()));
+        worldObject.setCucumberTestListener(CustomCucumberListener.map.get(Thread.currentThread()));
     }
 
     public CommonStepDefs(WorldObject worldObject, FlipkartPageObject flipkartPageObject, ShopCluesPageObject shopcluesPageObject, SnapdealPageObject snapdealPageObject) {
@@ -88,6 +89,9 @@ public class CommonStepDefs {
                 flipkartPageObject.search(searchText);
                 break;
             case "snapdeal":
+                /*if(searchText.equalsIgnoreCase("dell")) {
+                    Assert.fail("Purpose fail");
+                }*/
                 snapdealPageObject.search(searchText);
                 break;
             default:
@@ -97,7 +101,7 @@ public class CommonStepDefs {
 
     @Then("^user takes screen shot of the results$")
     public void takeScreenShot() {
-        scenario.embed(((TakesScreenshot) driverSetup.getBrowser()).getScreenshotAs(OutputType.BYTES), "image/JPEG");
+        scenario.embed(((TakesScreenshot) driverSetup.getBrowser()).getScreenshotAs(OutputType.BYTES), "image/png");
         worldObject.getExtentTest().pass("Successfully taken screen shot.");
     }
 

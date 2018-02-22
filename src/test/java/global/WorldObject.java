@@ -1,7 +1,7 @@
 package global;
 
 import com.aventstack.extentreports.ExtentTest;
-import util.CustomCucumberListner;
+import util.CustomCucumberListener;
 import util.LocatorUtils;
 
 public class WorldObject {
@@ -9,7 +9,7 @@ public class WorldObject {
     private Configuration configuration;
     private DriverSetup driverSetup;
     private LocatorUtils locatorUtils;
-    private CustomCucumberListner customCucumberListner;
+    private CustomCucumberListener CustomCucumberListener;
     private ExtentTest extentTest;
 
     public WorldObject(Configuration configuration, DriverSetup driverSetup, LocatorUtils locatorUtils) {
@@ -42,12 +42,12 @@ public class WorldObject {
         this.locatorUtils = locatorUtils;
     }
 
-    public void setCucumberTestListener(CustomCucumberListner customCucumberListner) {
-        this.customCucumberListner = customCucumberListner;
+    public void setCucumberTestListener(CustomCucumberListener CustomCucumberListener) {
+        this.CustomCucumberListener = CustomCucumberListener;
     }
 
-    public CustomCucumberListner getCustomCucumberListner() {
-        return customCucumberListner;
+    public CustomCucumberListener getCustomCucumberListener() {
+        return CustomCucumberListener;
     }
 
     public void setExtentTest(ExtentTest extentTest) {
@@ -55,8 +55,8 @@ public class WorldObject {
     }
 
     public ExtentTest getExtentTest() {
-        if(customCucumberListner!=null) {
-            return customCucumberListner.getTestStep();
+        if(CustomCucumberListener!=null) {
+            return CustomCucumberListener.getTestStep();
         }
         return extentTest;
     }

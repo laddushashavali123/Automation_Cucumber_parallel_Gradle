@@ -1,11 +1,7 @@
-import net.masterthought.cucumber.Configuration
-import net.masterthought.cucumber.ReportBuilder
-
 buildscript {
     repositories {
         mavenCentral()
     }
-    dependencies { classpath 'net.masterthought:cucumber-reporting:3.13.0' }
 }
 group 'com.practise'
 version '0.0.1'
@@ -29,46 +25,19 @@ dependencies {
     compile group: 'junit', name: 'junit', version: '4.12'
     compile group: 'com.aventstack', name: 'extentreports', version: '3.1.2'
     compile group: 'org.testng', name: 'testng', version: '6.9.10'
+    testCompile group: 'uk.com.robust-it', name: 'cloning', version: '1.9.9'
+    testCompile group: 'net.masterthought', name: 'cucumber-reporting', version: '3.13.0'
 }
 
 test {
     outputs.upToDateWhen { false }
     doFirst {
-        File reportOutputDirectory = new File("results");
-        if (reportOutputDirectory.exists())
-            reportOutputDirectory.deleteDir();
         Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe")
         Runtime.getRuntime().exec("taskkill /F /IM geckodriver.exe")
         /*hub = Runtime.getRuntime().exec("java -jar src/test/resources/selenium-server-standalone-3.8.1.jar -role hub -maxSession 10 -newSessionWaitTimeout 5000 -timeout 180 -browserTimeout 60 -cleanUpCycle 5000");
         Thread.sleep(4000);
         node = Runtime.getRuntime().exec("java -Dwebdriver.chrome.driver=\"src/test/resources/browserBinaries/chromedriver.exe\" -Dwebdriver.gecko.driver=\"src/test/resources/browserBinaries/geckodriver.exe\" -jar src/test/resources/selenium-server-standalone-3.8.1.jar -role node -hub http://mrunal-laptop:4444/grid/register -maxSession 10 -capabilities \"browserName=firefox, maxInstances=10\" -capabilities \"browserName=chrome, maxInstances=10\"")
         Thread.sleep(4000);*/
-    }
-
-    doLast {
-        File reportOutputDirectory = new File("results");
-        if (!reportOutputDirectory.exists())
-            return;
-        List<String> jsonFiles = new ArrayList<>();
-        for (File directory :
-                reportOutputDirectory.listFiles()) {
-            if (directory.isDirectory()) {
-                File jsonFile = new File(directory.getAbsolutePath() + File.separator + "cucumber.json");
-                if (jsonFile.exists())
-                    jsonFiles.add(jsonFile.getAbsolutePath());
-            }
-        }
-        String buildNumber = "1";
-        String projectName = "cucumberProject";
-        Configuration configuration = new Configuration(reportOutputDirectory, projectName);
-        configuration.setParallelTesting(true);
-        configuration.setRunWithJenkins(true);
-        configuration.setBuildNumber(buildNumber);
-        configuration.addClassifications("Platform", "Windows");
-        configuration.addClassifications("Browser", "Chrome");
-        configuration.addClassifications("Branch", "release/1.0");
-        ReportBuilder reportBuilder = new ReportBuilder(jsonFiles, configuration);
-        reportBuilder.generateReports();
     }
     /*useTestNG() {
         suites 'src/test/resources/testng.xml'

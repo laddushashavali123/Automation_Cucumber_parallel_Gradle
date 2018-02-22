@@ -3,28 +3,49 @@ package util;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.GherkinKeyword;
+import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.reporter.configuration.ChartLocation;
 import gherkin.formatter.Formatter;
 import gherkin.formatter.Reporter;
 import gherkin.formatter.model.*;
-import runner.ExtendedCucumberRunnerTest;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
-public class CustomCucumberListner implements Formatter, Reporter {
+public class CustomCucumberListener implements Formatter, Reporter {
 
-    public static final ExtentReports extentReports = new ExtentReports();
     public static boolean isReporterStarted = false;
+    public static ExtentReports extentReports;
+    public static Map<Thread, CustomCucumberListener> map = new LinkedHashMap<>();
+
     private ExtentTest testFeature;
     private ExtentTest testScenario;
     private ExtentTest testStep;
     private Queue<Step> testSteps = new LinkedList<>();
     private boolean isScenarioStarted = false;
-    public static Map<Thread, CustomCucumberListner> map = new LinkedHashMap<>();
 
-    public CustomCucumberListner() {
-        synchronized (CustomCucumberListner.class) {
+    public CustomCucumberListener() {
+        synchronized (CustomCucumberListener.class) {
+            if (extentReports == null) {
+                setDefaultExtentReporter();
+            }
             map.put(Thread.currentThread(), this);
         }
+    }
+
+    private void setDefaultExtentReporter() {
+        CustomCucumberListener.isReporterStarted = true;
+        extentReports = new ExtentReports();
+        ExtentHtmlReporter extentHtmlReporter = new ExtentHtmlReporter("ExtentReport.html");
+        extentHtmlReporter.config().setChartVisibilityOnOpen(true);
+        extentHtmlReporter.config().setTestViewChartLocation(ChartLocation.TOP);
+        extentHtmlReporter.config().setDocumentTitle("Test Report Title");
+        extentHtmlReporter.config().setReportName("Test Report Name");
+        CustomCucumberListener.extentReports.attachReporter(extentHtmlReporter);
+    }
+
+    public ExtentTest getTestStep() {
+        return testStep;
     }
 
     @Override
@@ -101,7 +122,9 @@ public class CustomCucumberListner implements Formatter, Reporter {
 
     @Override
     public void close() {
-
+        synchronized (extentReports) {
+            extentReports.flush();
+        }
     }
 
     @Override
@@ -119,8 +142,11 @@ public class CustomCucumberListner implements Formatter, Reporter {
         if (!isReporterStarted)
             return;
         if (result.getStatus().equalsIgnoreCase("skipped")) {
-            testStep.skip("Step Ignored");
-            testStep.skip(result.getError());
+            testStep.skip("Step Ignored / Skipped");
+        } else if (result.getStatus().equalsIgnoreCase("failed")) {
+            testStep.fail(result.getError());
+        } else if (result.getStatus().equalsIgnoreCase("undefined")) {
+            testStep.skip("Step Definition missing for this step.");
         }
     }
 
@@ -136,15 +162,22 @@ public class CustomCucumberListner implements Formatter, Reporter {
         if (!isScenarioStarted)
             return;
         Step step = testSteps.poll();
+        String stepName = step.getName();
+        if (step.getRows() != null) {
+            StringBuilder table = new StringBuilder();
+            for (DataTableRow row :
+                    step.getRows()) {
+                table.append("|").append(StringUtils.join(row.getCells(), "|")).append("|");
+            }
+            stepName += "<br>" + table;
+        } else if (step.getDocString() != null) {
+            stepName += " " + step.getDocString().getValue();
+        }
         try {
-            testStep = testScenario.createNode(new GherkinKeyword(step.getKeyword()), step.getName());
+            testStep = testScenario.createNode(new GherkinKeyword(step.getKeyword()), stepName);
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
-    }
-
-    public ExtentTest getTestStep() {
-        return testStep;
     }
 
     @Override

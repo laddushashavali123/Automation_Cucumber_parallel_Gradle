@@ -7,9 +7,8 @@ import org.junit.runner.RunWith;
 /**
  * Created by mrunal on 7/16/2017.
  */
-//@RunWith(Cucumber.class)
-@CucumberOptions(features = "src/test/resources/features/ShopCluesTest.feature", glue = "stepdefs",
-        plugin = {"html:cucumberResults/cucumber-html-report", "json:cucumberResults/cucumber.json", "util.CustomCucumberListner:ExtentReport.html"}, tags = {"~@Ignore"})
+@RunWith(Cucumber.class)
+@CucumberOptions(features = "src/test/resources/features/", glue = "stepdefs", plugin = {"json:jsonCucumberResults/", "html:htmlCucumberResults/"}, tags = {"~@Ignore"})
 public class JUnitRunner {
 
 }
