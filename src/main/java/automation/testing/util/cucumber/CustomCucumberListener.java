@@ -1,4 +1,4 @@
-package util;
+package automation.testing.util.cucumber;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
@@ -46,6 +46,14 @@ public class CustomCucumberListener implements Formatter, Reporter {
 
     public ExtentTest getTestStep() {
         return testStep;
+    }
+
+    public ExtentTest getTestScenario() {
+        return testScenario;
+    }
+
+    public ExtentTest getTestFeature() {
+        return testFeature;
     }
 
     @Override

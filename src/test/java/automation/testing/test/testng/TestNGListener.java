@@ -1,4 +1,4 @@
-package testng;
+package automation.testing.test.testng;
 
 import org.testng.IMethodInstance;
 import org.testng.IMethodInterceptor;

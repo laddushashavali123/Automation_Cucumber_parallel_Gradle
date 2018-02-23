@@ -1,24 +1,21 @@
-package stepdefs;
+package automation.testing.test.cucumber.stepdefs;
 
-import com.github.mkolisnyk.cucumber.runner.AfterSuite;
+import automation.testing.test.cucumber.global.Configuration;
+import automation.testing.test.cucumber.steps.FlipkartPageObject;
+import automation.testing.test.cucumber.steps.ShopCluesPageObject;
+import automation.testing.test.cucumber.steps.SnapdealPageObject;
 import cucumber.api.Scenario;
-import cucumber.api.java.After;
 import cucumber.api.java.Before;
 import cucumber.api.java.en.And;
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import global.Configuration;
-import global.DriverSetup;
-import global.WorldObject;
-import org.junit.Assert;
+import automation.testing.test.cucumber.global.DriverSetup;
+import automation.testing.test.cucumber.global.WorldObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import steps.ShopCluesPageObject;
-import steps.FlipkartPageObject;
-import steps.SnapdealPageObject;
-import util.CustomCucumberListener;
+import automation.testing.util.cucumber.CustomCucumberListener;
 
 /**
  * Created by mrunal on 7/16/2017.

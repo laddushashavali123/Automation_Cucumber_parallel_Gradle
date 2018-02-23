@@ -3,6 +3,7 @@
 build
 out
 results
-cucumber-guice-practise.iml
-ExtentReport.html
-cucumberResults
+*.iml
+*.html
+cucumber-report
+*Results

@@ -3,7 +3,7 @@
 <suite name="Suite 1" data-provider-thread-count="2" parallel="instances">
     <test name="Test 1">
         <classes>
-            <class name="testng.TestFactory"/>
+            <class name="automation.testing.test.testng.TestFactory"/>
         </classes>
     </test>
 </suite>

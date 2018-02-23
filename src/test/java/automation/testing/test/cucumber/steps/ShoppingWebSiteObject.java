@@ -1,9 +1,8 @@
-package steps;
+package automation.testing.test.cucumber.steps;
 
-import com.aventstack.extentreports.ExtentTest;
-import global.Configuration;
-import global.DriverSetup;
-import global.WorldObject;
+import automation.testing.test.cucumber.global.Configuration;
+import automation.testing.test.cucumber.global.DriverSetup;
+import automation.testing.test.cucumber.global.WorldObject;
 import util.LocatorUtils;
 
 public abstract class ShoppingWebSiteObject {

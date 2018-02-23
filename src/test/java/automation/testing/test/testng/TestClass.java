@@ -1,4 +1,4 @@
-package testng;
+package automation.testing.test.testng;
 
 import com.aventstack.extentreports.ExtentTest;
 import org.testng.annotations.*;

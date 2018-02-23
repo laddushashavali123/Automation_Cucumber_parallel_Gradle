@@ -1,4 +1,4 @@
-package util;
+package automation.testing.util.cucumber;
 
 import org.junit.runner.Computer;
 import org.junit.runner.Runner;

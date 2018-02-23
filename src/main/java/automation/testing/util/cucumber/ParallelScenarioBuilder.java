@@ -1,4 +1,4 @@
-package util;
+package automation.testing.util.cucumber;
 
 import gherkin.formatter.Formatter;
 import gherkin.formatter.Reporter;

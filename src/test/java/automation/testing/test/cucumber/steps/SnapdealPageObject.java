@@ -1,10 +1,8 @@
-package steps;
+package automation.testing.test.cucumber.steps;
 
-import global.DriverSetup;
-import global.WorldObject;
+import automation.testing.test.cucumber.global.WorldObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
-import util.LocatorUtils;
 
 public class SnapdealPageObject extends ShoppingWebSiteObject {
 

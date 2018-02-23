@@ -1,7 +1,7 @@
 package util;
 
-import global.Configuration;
-import global.DriverSetup;
+import automation.testing.test.cucumber.global.Configuration;
+import automation.testing.test.cucumber.global.DriverSetup;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;

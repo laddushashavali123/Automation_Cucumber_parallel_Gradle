@@ -1,4 +1,4 @@
-package global;
+package automation.testing.test.cucumber.global;
 
 import java.io.IOException;
 import java.util.Properties;

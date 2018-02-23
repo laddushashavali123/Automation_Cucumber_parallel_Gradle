@@ -1,7 +1,7 @@
-package global;
+package automation.testing.test.cucumber.global;
 
 import com.aventstack.extentreports.ExtentTest;
-import util.CustomCucumberListener;
+import automation.testing.util.cucumber.CustomCucumberListener;
 import util.LocatorUtils;
 
 public class WorldObject {

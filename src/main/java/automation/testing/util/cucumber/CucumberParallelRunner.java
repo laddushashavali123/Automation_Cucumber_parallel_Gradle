@@ -1,9 +1,8 @@
-package runner;
+package automation.testing.util.cucumber;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import com.aventstack.extentreports.reporter.configuration.ChartLocation;
-import com.rits.cloning.Cloner;
 import cucumber.api.CucumberOptions;
 import cucumber.api.SnippetType;
 import net.masterthought.cucumber.Configuration;
@@ -11,9 +10,6 @@ import net.masterthought.cucumber.ReportBuilder;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
-import util.CustomCucumberListener;
-import util.ParallelConfig;
-import util.ParallelScenarioBuilder;
 
 import java.io.File;
 import java.lang.annotation.Annotation;
@@ -189,18 +185,16 @@ public class CucumberParallelRunner {
         };
 
         for (int i = 0; i < featureFiles.size(); i++) {
-            Cloner cloner = new Cloner();
-            Class<?> clonedInstance = cloner.deepClone(originalRunnerClass);
             Method method = Class.class.getDeclaredMethod("annotationData");
             method.setAccessible(true);
-            Object annotationData = method.invoke(clonedInstance);
+            Object annotationData = method.invoke(originalRunnerClass);
             Field field = annotationData.getClass().getDeclaredField("annotations");
             field.setAccessible(true);
             @SuppressWarnings("unchecked")
             Map<Class<? extends Annotation>, Annotation> annotations = (Map<Class<? extends Annotation>, Annotation>) field
                     .get(annotationData);
             annotations.put(CucumberOptions.class, newAnnotation);
-            featureRunners.add(clonedInstance);
+            featureRunners.add(originalRunnerClass);
         }
         return this;
     }
@@ -283,17 +277,15 @@ public class CucumberParallelRunner {
                 return true;
             }
         };
-        Cloner cloner = new Cloner();
-        Class<?> clonedInstance = cloner.deepClone(originalRunnerClass);
         Method method = Class.class.getDeclaredMethod("annotationData");
         method.setAccessible(true);
-        Object annotationData = method.invoke(clonedInstance);
+        Object annotationData = method.invoke(originalRunnerClass);
         Field field = annotationData.getClass().getDeclaredField("annotations");
         field.setAccessible(true);
         @SuppressWarnings("unchecked")
         Map<Class<? extends Annotation>, Annotation> annotations = (Map<Class<? extends Annotation>, Annotation>) field.get(annotationData);
         annotations.put(CucumberOptions.class, newAnnotation);
-        featureRunners.add(clonedInstance);
+        featureRunners.add(originalRunnerClass);
         JUnitCore.runClasses(ParallelConfig.classes(), featureRunners.toArray(new Class<?>[featureRunners.size()]));
         annotations.put(CucumberOptions.class, originalAnnotation);
         return this;
@@ -327,17 +319,5 @@ public class CucumberParallelRunner {
             reportBuilder.generateReports();
         }
         return this;
-    }
-
-    public static void main(String[] args) throws IllegalAccessException, NoSuchFieldException, ClassNotFoundException, NoSuchMethodException, InvocationTargetException {
-        CucumberParallelRunner runner = new CucumberParallelRunner();
-        runner
-                .withExtentReporter("ExtentReport.html", "Test Document Title", "Test Report Name")
-                .withCucumberReporting()
-                .withParallel(ParallelType.SCENARIO)
-                .configureParallelScenarioExecution(JUnitRunner.class.getCanonicalName())
-                .assembleParallelRunner(JUnitRunner.class.getCanonicalName())
-                .run(4)
-                .cucumberReport("cucumber-report", "Cucumber Report");
     }
 }

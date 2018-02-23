@@ -1,4 +1,4 @@
-package global;
+package automation.testing.test.cucumber.global;
 
 import com.aventstack.extentreports.ExtentTest;
 import org.openqa.selenium.WebDriver;
@@ -7,7 +7,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import util.SeleniumGridUtil;
 
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
