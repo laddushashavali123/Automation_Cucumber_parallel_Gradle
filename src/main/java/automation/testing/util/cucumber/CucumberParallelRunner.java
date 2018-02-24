@@ -7,11 +7,13 @@ import cucumber.api.CucumberOptions;
 import cucumber.api.SnippetType;
 import net.masterthought.cucumber.Configuration;
 import net.masterthought.cucumber.ReportBuilder;
+import org.apache.commons.io.FileUtils;
 import org.junit.runner.JUnitCore;
 import org.junit.runner.Result;
 import org.junit.runner.notification.Failure;
 
 import java.io.File;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -297,13 +299,14 @@ public class CucumberParallelRunner {
      * @throws SecurityException
      * @throws IllegalArgumentException
      */
-    public CucumberParallelRunner run(int numberOfThreads) throws SecurityException, IllegalArgumentException {
+    public CucumberParallelRunner run(int numberOfThreads) throws SecurityException, IllegalArgumentException, IOException {
         results = JUnitCore.runClasses(ParallelConfig.cucumberScenarios(numberOfThreads),
                 featureRunners.toArray(new Class<?>[featureRunners.size()]));
         for (Failure failure : results.getFailures()) {
             System.out.println(failure.getTrace());
             System.out.println(failure.getMessage());
         }
+        FileUtils.cleanDirectory(ParallelScenarioBuilder.dir);
         return this;
     }
 

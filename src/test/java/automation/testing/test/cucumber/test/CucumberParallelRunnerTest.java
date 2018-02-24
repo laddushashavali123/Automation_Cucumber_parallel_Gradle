@@ -5,12 +5,13 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.Result;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 public class CucumberParallelRunnerTest {
 
     @Test
-    public void test() throws ClassNotFoundException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException {
+    public void test() throws ClassNotFoundException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException {
         CucumberParallelRunner runner = new CucumberParallelRunner();
         Result result = runner
                 .withExtentReporter("ExtentReport.html", "Test Document Title", "Test Report Name")
