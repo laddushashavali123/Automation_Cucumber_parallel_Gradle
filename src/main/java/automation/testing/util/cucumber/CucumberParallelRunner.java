@@ -212,7 +212,9 @@ public class CucumberParallelRunner {
      * @throws IllegalAccessException
      * @throws NoSuchFieldException
      */
-    public CucumberParallelRunner configureParallelScenarioExecution(String templateRunnerClassName) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException {
+    public CucumberParallelRunner configureParallelScenarioExecution(String templateRunnerClassName) throws ClassNotFoundException, NoSuchMethodException, InvocationTargetException, IllegalAccessException, NoSuchFieldException, IOException {
+        if (ParallelScenarioBuilder.dir.exists())
+            FileUtils.cleanDirectory(ParallelScenarioBuilder.dir);
         List<Class<?>> featureRunners = new ArrayList<>();
         Class<?> originalRunnerClass = Class.forName(templateRunnerClassName);
         CucumberOptions originalAnnotation = originalRunnerClass.getAnnotation(CucumberOptions.class);
@@ -299,14 +301,13 @@ public class CucumberParallelRunner {
      * @throws SecurityException
      * @throws IllegalArgumentException
      */
-    public CucumberParallelRunner run(int numberOfThreads) throws SecurityException, IllegalArgumentException, IOException {
+    public CucumberParallelRunner run(int numberOfThreads) throws SecurityException, IllegalArgumentException {
         results = JUnitCore.runClasses(ParallelConfig.cucumberScenarios(numberOfThreads),
                 featureRunners.toArray(new Class<?>[featureRunners.size()]));
         for (Failure failure : results.getFailures()) {
             System.out.println(failure.getTrace());
             System.out.println(failure.getMessage());
         }
-        FileUtils.cleanDirectory(ParallelScenarioBuilder.dir);
         return this;
     }
 
