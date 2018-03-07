@@ -11,6 +11,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ParallelScenarioBuilder implements Formatter, Reporter {
 
@@ -83,15 +84,20 @@ public class ParallelScenarioBuilder implements Formatter, Reporter {
             if (!scen.exists())
                 scen.createNewFile();
             BufferedWriter writer = new BufferedWriter(new FileWriter(scen));
+            writer.write(StringUtils.join(feature.getTags().stream().map(Tag::getName).collect(Collectors.toList()), " "));
+            writer.newLine();
             writer.write(feature.getKeyword() + ": " + feature.getName());
             writer.newLine();
             writer.write(feature.getDescription());
             writer.newLine();
             writer.newLine();
+            writer.write(StringUtils.join(scenario.getTags().stream().map(Tag::getName).collect(Collectors.toList()), " "));
+            writer.newLine();
 //            writer.write(scenario.getKeyword() + ": " + scenario.getName());
             writer.write("Scenario: " + scenario.getName());
             writer.newLine();
             writer.write(scenario.getDescription());
+            writer.newLine();
             for (Step step :
                     steps) {
                 String stepName = step.getName();

@@ -7,3 +7,4 @@ results
 *.html
 cucumber-report
 *Results
+src/test/java/automation/testing/test/testng/*

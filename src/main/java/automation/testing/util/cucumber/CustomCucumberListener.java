@@ -72,6 +72,10 @@ public class CustomCucumberListener implements Formatter, Reporter {
             return;
         synchronized (extentReports) {
             testFeature = extentReports.createTest(feature.getName(), feature.getDescription());
+            for (Tag tag :
+                    feature.getTags()) {
+                testFeature.assignCategory(tag.getName());
+            }
         }
     }
 
@@ -101,7 +105,11 @@ public class CustomCucumberListener implements Formatter, Reporter {
             return;
         isScenarioStarted = true;
         try {
-            testScenario = testFeature.createNode(new GherkinKeyword("Scenario"), scenario.getName());
+            testScenario = testFeature.createNode(new GherkinKeyword("Scenario"), scenario.getName(), scenario.getDescription());
+            for (Tag tag :
+                    scenario.getTags()) {
+                testScenario.assignCategory(tag.getName());
+            }
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
         }
