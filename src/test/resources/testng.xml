@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="Suite 1" data-provider-thread-count="2" parallel="instances">
-    <test name="Test 1">
+<suite name="Automation Testing Util Test Suite">
+    <test name="Cucumber Parallel Runner Test">
         <classes>
-            <class name="automation.testing.test.testng.TestFactory"/>
+            <class name="automation.testing.test.cucumber.test.CucumberParallelRunnerTest"/>
         </classes>
     </test>
 </suite>

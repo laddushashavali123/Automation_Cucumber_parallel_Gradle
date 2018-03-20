@@ -2,8 +2,8 @@ package automation.testing.test.cucumber.test;
 
 import automation.testing.util.cucumber.CucumberParallelRunner;
 import org.junit.Assert;
-import org.junit.Test;
 import org.junit.runner.Result;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
