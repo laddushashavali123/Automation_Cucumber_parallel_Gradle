@@ -1,5 +1,6 @@
 package automation.testing.util.cucumber;
 
+import cucumber.api.CucumberOptions;
 import gherkin.formatter.Formatter;
 import gherkin.formatter.Reporter;
 import gherkin.formatter.model.*;
@@ -13,8 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * This implementation class reads .feature files from {@link CucumberOptions#features()} annotated on the supplied JUnit Template runner and creates multiple .feature files out of each scenario.
+ *
+ * @author mrunal
+ */
 public class ParallelScenarioBuilder implements Formatter, Reporter {
 
+    /**
+     * User's temp directory where it would dump the newly created .feature files.
+     */
     public static File dir = new File(System.getProperty("java.io.tmpdir") + File.separator + "features");
     private Feature feature;
     private int featureCounter = 0, scenarioCounter = 0;

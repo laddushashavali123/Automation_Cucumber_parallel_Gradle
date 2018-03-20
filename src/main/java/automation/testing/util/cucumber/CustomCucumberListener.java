@@ -12,6 +12,14 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.*;
 
+/**
+ * This implementation provides user with {@link ExtentReports} report. It listens to all the events of cucumber scenario life cycle. <br/>
+ * User can retrieve the {@link ExtentTest} in order to log information. <br/>
+ * <code>
+ *     {@link ExtentTest} extentTest = CustomCucumberListener.get(Thread.currentThread()).getTestStep()
+ * </code>
+ * @author mrunal
+ */
 public class CustomCucumberListener implements Formatter, Reporter {
 
     public static boolean isReporterStarted = false;

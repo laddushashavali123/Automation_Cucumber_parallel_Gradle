@@ -11,6 +11,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * This class provides user with option to run either classes, methods or cucumber feature files in parallel.
+ *
+ * @author mrunal
+ */
 public class ParallelConfig extends Computer {
 
     private final boolean classes;

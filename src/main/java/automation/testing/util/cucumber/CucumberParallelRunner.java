@@ -20,6 +20,13 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.*;
 
+/**
+ * This utility class provides user option to run cucumber test in parallel: <br/>
+ * a) User can run features in parallel <br/>
+ * b) User can run scenarios in parallel <br/>
+ *
+ * @author mrunal
+ */
 public class CucumberParallelRunner {
 
     public enum ParallelType {
