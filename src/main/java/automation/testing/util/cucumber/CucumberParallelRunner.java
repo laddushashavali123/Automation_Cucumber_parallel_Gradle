@@ -33,8 +33,8 @@ public class CucumberParallelRunner {
         FEATURE, SCENARIO;
     }
 
-    private static List<File> featureFiles;
-    private static int counter = -1;
+    private List<File> featureFiles;
+    private int counter = -1;
 
     private ParallelType parallelType = ParallelType.FEATURE;
     private List<Class<?>> featureRunners = new ArrayList<>();

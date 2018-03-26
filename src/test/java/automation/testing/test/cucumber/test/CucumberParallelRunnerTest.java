@@ -3,24 +3,57 @@ package automation.testing.test.cucumber.test;
 import automation.testing.util.cucumber.CucumberParallelRunner;
 import org.junit.Assert;
 import org.junit.runner.Result;
-import org.testng.annotations.Test;
+import org.testng.annotations.*;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
 public class CucumberParallelRunnerTest {
 
-    @Test
-    public void test() throws ClassNotFoundException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException {
+    @BeforeTest
+    public void setUp() throws IOException {
+        Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe");
+        Runtime.getRuntime().exec("taskkill /F /IM geckodriver.exe");
+        Runtime.getRuntime().exec("taskkill /F /IM phantomjs.exe");
+    }
+
+    @AfterTest
+    public void tearDown() throws IOException {
+        Runtime.getRuntime().exec("taskkill /F /IM chromedriver.exe");
+        Runtime.getRuntime().exec("taskkill /F /IM geckodriver.exe");
+        Runtime.getRuntime().exec("taskkill /F /IM phantomjs.exe");
+    }
+
+    @Test(priority = 1)
+    public void cucumberParallelScenarioTest() throws ClassNotFoundException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException {
+        File resultsDir = new File("cucumber-parallel-execution-results");
+        resultsDir.mkdirs();
         CucumberParallelRunner runner = new CucumberParallelRunner();
         Result result = runner
-                .withExtentReporter("ExtentReport.html", "Test Document Title", "Test Report Name")
+                .withExtentReporter("cucumber-parallel-execution-results/extent-report-parallel-scenario.html", "Parallel Scenario Execution Report", "Cucumber Parallel Scenario Execution Test Result")
                 .withCucumberReporting()
                 .withParallel(CucumberParallelRunner.ParallelType.SCENARIO)
-                .configureParallelScenarioExecution(JUnitRunnerTemplate.class.getCanonicalName())
-                .assembleParallelRunner(JUnitRunnerTemplate.class.getCanonicalName())
-                .run(4)
-                .cucumberReport("cucumber-report", "Cucumber Report").getResults();
+                .configureParallelScenarioExecution(ParallelScenarioRunnerTemplate.class.getCanonicalName())
+                .assembleParallelRunner(ParallelScenarioRunnerTemplate.class.getCanonicalName())
+                .run(3)
+                .cucumberReport("cucumber-parallel-execution-results/parallel-scenario-report", "Cucumber Parallel Scenario Execution Test Result").getResults();
+        Assert.assertTrue(result.wasSuccessful());
+    }
+
+    @Test(priority = 2)
+    public void cucumberParallelFeatureTest() throws ClassNotFoundException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException {
+        File resultsDir = new File("cucumber-parallel-execution-results");
+        resultsDir.mkdirs();
+        CucumberParallelRunner runner = new CucumberParallelRunner();
+        Result result = runner
+                .withExtentReporter("cucumber-parallel-execution-results/extent-report-parallel-feature.html", "Parallel Feature Execution Report", "Cucumber Parallel Feature Execution Test Result")
+                .withCucumberReporting()
+                .withParallel(CucumberParallelRunner.ParallelType.FEATURE)
+                .configureParallelScenarioExecution(ParallelFeatureRunnerTemplate.class.getCanonicalName())
+                .assembleParallelRunner(ParallelFeatureRunnerTemplate.class.getCanonicalName())
+                .run(3)
+                .cucumberReport("cucumber-parallel-execution-results/parallel-feature-report", "Cucumber Parallel Feature Execution Test Result").getResults();
         Assert.assertTrue(result.wasSuccessful());
     }
 }

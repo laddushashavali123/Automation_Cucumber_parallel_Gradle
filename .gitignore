@@ -2,9 +2,7 @@
 .idea
 build
 out
-results
 *.iml
 *.html
-cucumber-report
-*Results
+cucumber-parallel-execution-results
 src/test/java/automation/testing/test/testng/*

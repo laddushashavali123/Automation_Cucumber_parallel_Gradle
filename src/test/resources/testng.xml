@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="Automation Testing Util Test Suite">
+<suite name="Automation Testing Util Test Suite" preserve-order="true">
     <test name="Cucumber Parallel Runner Test">
         <classes>
             <class name="automation.testing.test.cucumber.test.CucumberParallelRunnerTest"/>
+        </classes>
+    </test>
+    <test name="Cucumber Report Runner Test" junit="true">
+        <classes>
+            <class name="automation.testing.test.cucumber.test.ExtendedCucumberRunnerTest"/>
         </classes>
     </test>
 </suite>

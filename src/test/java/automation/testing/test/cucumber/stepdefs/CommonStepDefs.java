@@ -14,8 +14,12 @@ import automation.testing.test.cucumber.global.WorldObject;
 import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.TimeoutException;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import automation.testing.util.cucumber.CustomCucumberListener;
+
+import java.net.MalformedURLException;
 
 /**
  * Created by mrunal on 7/16/2017.
@@ -48,7 +52,7 @@ public class CommonStepDefs {
     }
 
     @Given("^user launches \"([^\"]*)\" browser$")
-    public void launchesBrowser(DriverSetup.BrowserType browserName) throws Exception {
+    public void launchesBrowser(DriverSetup.BrowserType browserName) throws MalformedURLException, InterruptedException {
         if (Boolean.valueOf(configuration.getProperty("useGrid"))) {
             driverSetup.initializeRemoteBrowser(browserName);
         } else {
@@ -61,14 +65,30 @@ public class CommonStepDefs {
         this.application = appName;
         switch (appName) {
             case "shopclues":
-                driverSetup.getBrowser().get(configuration.shopclues);
+                try {
+                    driverSetup.getBrowser().get(configuration.shopclues);
+                } catch (TimeoutException e) {
+                    driverSetup.getBrowser().navigate().refresh();
+                    driverSetup.getBrowser().get(configuration.shopclues);
+                }
                 break;
             case "flipkart":
-                driverSetup.getBrowser().get(configuration.flipkarturl);
-                driverSetup.getWait().until(ExpectedConditions.presenceOfElementLocated(By.xpath(".//span[text()='Login']//ancestor::div[./button[not(@type)]]/button"))).click();
+                try {
+                    driverSetup.getBrowser().get(configuration.flipkarturl);
+                } catch (TimeoutException e) {
+                    driverSetup.getBrowser().navigate().refresh();
+                    driverSetup.getBrowser().get(configuration.flipkarturl);
+                }
+                if (!(driverSetup.getBrowser() instanceof PhantomJSDriver))
+                    driverSetup.getWait().until(ExpectedConditions.presenceOfElementLocated(By.xpath(".//span[text()='Login']//ancestor::div[./button[not(@type)]]/button"))).click();
                 break;
             case "snapdeal":
-                driverSetup.getBrowser().get(configuration.snapdealurl);
+                try {
+                    driverSetup.getBrowser().get(configuration.snapdealurl);
+                } catch (TimeoutException e) {
+                    driverSetup.getBrowser().navigate().refresh();
+                    driverSetup.getBrowser().get(configuration.snapdealurl);
+                }
                 break;
             default:
                 break;

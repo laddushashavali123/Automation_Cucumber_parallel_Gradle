@@ -2,12 +2,16 @@ package automation.testing.test.cucumber.global;
 
 import com.aventstack.extentreports.ExtentTest;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebDriverException;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
@@ -17,7 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class DriverSetup {
 
     public enum BrowserType {
-        FIREFOX, CHROME, IE
+        FIREFOX, CHROME, IE, PHANTOMJS
     }
 
     private Configuration configuration;
@@ -50,7 +54,7 @@ public class DriverSetup {
         }
     }
 
-    public WebDriver initializeRemoteBrowser(BrowserType browserType) throws Exception {
+    public WebDriver initializeRemoteBrowser(BrowserType browserType) throws MalformedURLException {
         DesiredCapabilities desiredCapabilities;
         switch (browserType) {
             case FIREFOX:
@@ -71,7 +75,7 @@ public class DriverSetup {
         return browser;
     }
 
-    public WebDriver initializeBrowser(BrowserType browserType) throws Exception {
+    public WebDriver initializeBrowser(BrowserType browserType) throws InterruptedException, MalformedURLException {
         switch (browserType) {
             case FIREFOX: {
                 System.setProperty("webdriver.gecko.driver", "src\\test\\resources\\browserBinaries\\geckodriver.exe");
@@ -81,6 +85,20 @@ public class DriverSetup {
             case CHROME: {
                 System.setProperty("webdriver.chrome.driver", "src\\test\\resources\\browserBinaries\\chromedriver.exe");
                 browser = new ChromeDriver();
+                browser.manage().window().maximize();
+                break;
+            }
+            case PHANTOMJS: {
+                DesiredCapabilities capabilities = new DesiredCapabilities();
+                capabilities.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY,"src\\test\\resources\\browserBinaries\\phantomjs.exe");
+                capabilities.setJavascriptEnabled(true);
+                capabilities.setCapability("takesScreenshot",true);
+                try {
+                    browser = new PhantomJSDriver(capabilities);
+                } catch (WebDriverException e) {
+                    Thread.sleep(3000);
+                    browser = new PhantomJSDriver(capabilities);
+                }
                 break;
             }
             default: {

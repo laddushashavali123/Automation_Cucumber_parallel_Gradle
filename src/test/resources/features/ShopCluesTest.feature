@@ -1,4 +1,4 @@
-@new
+@parallel-feature
 Feature: Cucumber Picocontainer feature test shopclues
   This feature tests Cucumber Picocontainer on Shopclues website
 
@@ -6,18 +6,18 @@ Feature: Cucumber Picocontainer feature test shopclues
   In this scenario we will launch shopclues
   then search for some item
   and then take its screen shot
-    Given user launches "CHROME" browser
+    Given user launches "<browser>" browser
     Then user opens "shopclues" app
     And user searches for "<item>"
     Then user takes screen shot of the results
     And closes the browser
 
-  @ex1
+  @cucumber-report @parallel-scenario
     Examples: Mobile
-      | item   |
-      | iphone |
+      | item   | browser   |
+      | iphone | PHANTOMJS |
 
-  @ex2
+  @parallel-scenario
     Examples: Firm
-      | item    |
-      | samsung |
+      | item    | browser |
+      | samsung | CHROME  |

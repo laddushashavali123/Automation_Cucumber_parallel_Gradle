@@ -9,6 +9,6 @@ import org.junit.runner.RunWith;
  */
 @RunWith(Cucumber.class)
 @CucumberOptions(features = "src/test/resources/features/", glue = "automation/testing/test/cucumber/stepdefs", plugin = {"json:cucumber-parallel-execution-results/jsonCucumberResults/", "html:cucumber-parallel-execution-results/htmlCucumberResults/"}, tags = {"~@Ignore"})
-public class JUnitRunnerTemplate {
+public class ParallelScenarioRunnerTemplate {
 
 }

@@ -1,0 +1,40 @@
+{
+  "@type": "com.github.mkolisnyk.cucumber.reporting.types.consolidated.ConsolidatedReportBatch",
+  "models": [
+    {
+      "items": [
+        {
+          "path": "cucumber-parallel-execution-results/cucumber-results-feature-overview-chart.html",
+          "title": "Features Quality Chart"
+        },
+        {
+          "path": "cucumber-parallel-execution-results/cucumber-results-feature-overview.html",
+          "title": "Features Overview"
+        },
+        {
+          "path": "cucumber-parallel-execution-results/cucumber-results-charts-report.html",
+          "title": "Execution and Coverage Status Report"
+        },
+        {
+          "path": "cucumber-parallel-execution-results/cucumber-results-coverage.html",
+          "title": "Coverage Report"
+        },
+        {
+          "path": "cucumber-parallel-execution-results/cucumber-results-usage.html",
+          "title": "Usage Report"
+        },
+        {
+          "path": "cucumber-parallel-execution-results/cucumber-results-agg-test-results.html",
+          "title": "Aggregated Test Results"
+        },
+        {
+          "path": "cucumber-parallel-execution-results/cucumber-results-test-results.html",
+          "title": "Test Results With Retries"
+        }
+      ],
+      "reportSuffix": "main",
+      "title": "Overall Results Batch",
+      "useTableOfContents": true
+    }
+  ]
+}
