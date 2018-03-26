@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+    stages {
+        stage('Checkout Project From Git') {
+            steps {
+                cleanWs()
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'b48e7780-1ae8-4806-a250-3b5a266927c1', url: 'https://github.com/mrunalgosar/automation_testing_util.git']]])
+            }
+        }
+        stage('Gradle Run Test') {
+            steps {
+                bat 'gradle test'
+            }
+            post {
+                always {
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'cucumber-parallel-execution-results/parallel-feature-report/cucumber-html-reports', reportFiles: 'overview-features.html', reportName: 'Parallel Feature Execution Cucumber Report', reportTitles: 'Parallel Feature Execution Cucumber Report'])
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'cucumber-parallel-execution-results/parallel-scenario-report/cucumber-html-reports', reportFiles: 'overview-features.html', reportName: 'Parallel Scenario Execution Cucumber Report', reportTitles: 'Parallel Scenario Execution Cucumber Report'])
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'cucumber-parallel-execution-results', reportFiles: 'cucumber-results-main.html', reportName: 'Parallel Execution Report via Cucumber Report Library', reportTitles: 'Parallel Execution Report via Cucumber Report Library'])
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'cucumber-parallel-execution-results', reportFiles: 'extent-report-parallel-feature.html', reportName: 'Extent Report from Parallel Feature Execution', reportTitles: 'Extent Report from Parallel Feature Execution'])
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'cucumber-parallel-execution-results', reportFiles: 'extent-report-parallel-scenario.html', reportName: 'Extent Report from Parallel Scenario Execution', reportTitles: 'Extent Report from Parallel Scenario Execution'])
+                    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'cucumber-parallel-execution-results', reportFiles: 'extent-report-cucumber-report-based.html', reportName: 'Extent Report from Cucumber Report based Parallel Feature Execution', reportTitles: 'Extent Report from Cucumber Report based Parallel Feature Execution'])
+                }
+            }
+        }
+    }
+}

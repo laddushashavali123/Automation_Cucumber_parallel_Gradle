@@ -36,7 +36,7 @@ public class CucumberParallelRunnerTest {
                 .withParallel(CucumberParallelRunner.ParallelType.SCENARIO)
                 .configureParallelScenarioExecution(ParallelScenarioRunnerTemplate.class.getCanonicalName())
                 .assembleParallelRunner(ParallelScenarioRunnerTemplate.class.getCanonicalName())
-                .run(3)
+                .run(2)
                 .cucumberReport("cucumber-parallel-execution-results/parallel-scenario-report", "Cucumber Parallel Scenario Execution Test Result").getResults();
         Assert.assertTrue(result.wasSuccessful());
     }
@@ -52,7 +52,7 @@ public class CucumberParallelRunnerTest {
                 .withParallel(CucumberParallelRunner.ParallelType.FEATURE)
                 .configureParallelScenarioExecution(ParallelFeatureRunnerTemplate.class.getCanonicalName())
                 .assembleParallelRunner(ParallelFeatureRunnerTemplate.class.getCanonicalName())
-                .run(3)
+                .run(2)
                 .cucumberReport("cucumber-parallel-execution-results/parallel-feature-report", "Cucumber Parallel Feature Execution Test Result").getResults();
         Assert.assertTrue(result.wasSuccessful());
     }
