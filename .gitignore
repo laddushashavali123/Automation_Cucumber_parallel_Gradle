@@ -6,3 +6,4 @@ out
 *.html
 cucumber-parallel-execution-results
 src/test/java/automation/testing/test/testng/*
+local.properties
