@@ -1,9 +1,26 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="Automation Testing Util Test Suite" preserve-order="true">
-    <test name="Cucumber Parallel Runner Test">
+    <test name="Cucumber Parallel Scenario Runner Test">
         <classes>
-            <class name="automation.testing.test.cucumber.test.CucumberParallelRunnerTest"/>
+            <!--<class name="automation.testing.test.cucumber.test.CucumberParallelRunnerTest"/>-->
+            <class name="automation.testing.test.cucumber.test.CucumberParallelRunnerTest">
+                <methods>
+                    <parameter name="numberOfThreads" value="3"/>
+                    <include name="cucumberParallelScenarioTest"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
+    <test name="Cucumber Parallel Feature Runner Test">
+        <classes>
+            <!--<class name="automation.testing.test.cucumber.test.CucumberParallelRunnerTest"/>-->
+            <class name="automation.testing.test.cucumber.test.CucumberParallelRunnerTest">
+                <methods>
+                    <parameter name="numberOfThreads" value="3"/>
+                    <include name="cucumberParallelFeatureTest"/>
+                </methods>
+            </class>
         </classes>
     </test>
     <test name="Cucumber Report Runner Test" junit="true">

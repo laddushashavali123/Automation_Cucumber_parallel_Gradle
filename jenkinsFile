@@ -46,5 +46,10 @@ pipeline {
 				}
 			}
         }
+        stage('Publish Artifacts to JCenter') {
+            steps {
+                bat 'gradle bintray'
+            }
+        }
     }
 }

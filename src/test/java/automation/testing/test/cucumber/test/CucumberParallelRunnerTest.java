@@ -26,7 +26,8 @@ public class CucumberParallelRunnerTest {
     }
 
     @Test(priority = 1)
-    public void cucumberParallelScenarioTest() throws ClassNotFoundException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException {
+    @Parameters({"numberOfThreads"})
+    public void cucumberParallelScenarioTest(int numberOfThreads) throws ClassNotFoundException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException {
         File resultsDir = new File("cucumber-parallel-execution-results");
         resultsDir.mkdirs();
         CucumberParallelRunner runner = new CucumberParallelRunner();
@@ -36,13 +37,14 @@ public class CucumberParallelRunnerTest {
                 .withParallel(CucumberParallelRunner.ParallelType.SCENARIO)
                 .configureParallelScenarioExecution(ParallelScenarioRunnerTemplate.class.getCanonicalName())
                 .assembleParallelRunner(ParallelScenarioRunnerTemplate.class.getCanonicalName())
-                .run(2)
+                .run(numberOfThreads)
                 .cucumberReport("cucumber-parallel-execution-results/parallel-scenario-report", "Cucumber Parallel Scenario Execution Test Result").getResults();
         Assert.assertTrue(result.wasSuccessful());
     }
 
     @Test(priority = 2)
-    public void cucumberParallelFeatureTest() throws ClassNotFoundException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException {
+    @Parameters({"numberOfThreads"})
+    public void cucumberParallelFeatureTest(int numberOfThreads) throws ClassNotFoundException, NoSuchMethodException, NoSuchFieldException, IllegalAccessException, InvocationTargetException, IOException {
         File resultsDir = new File("cucumber-parallel-execution-results");
         resultsDir.mkdirs();
         CucumberParallelRunner runner = new CucumberParallelRunner();
@@ -52,7 +54,7 @@ public class CucumberParallelRunnerTest {
                 .withParallel(CucumberParallelRunner.ParallelType.FEATURE)
                 .configureParallelScenarioExecution(ParallelFeatureRunnerTemplate.class.getCanonicalName())
                 .assembleParallelRunner(ParallelFeatureRunnerTemplate.class.getCanonicalName())
-                .run(2)
+                .run(numberOfThreads)
                 .cucumberReport("cucumber-parallel-execution-results/parallel-feature-report", "Cucumber Parallel Feature Execution Test Result").getResults();
         Assert.assertTrue(result.wasSuccessful());
     }

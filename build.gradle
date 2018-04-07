@@ -1,5 +1,15 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+}
+plugins {
+    id "com.jfrog.bintray" version "1.8.0"
+}
+
+def ver = '1.1'
 group 'com.in.automation.testing.util'
-version '1.0'
+version ver
 
 apply plugin: 'java'
 apply plugin: 'findbugs'
@@ -8,6 +18,8 @@ apply plugin: 'pmd'
 apply plugin: 'project-report'
 apply plugin: 'build-dashboard'
 apply plugin: 'jacoco'
+apply plugin: 'maven'
+apply plugin: 'maven-publish'
 
 sourceCompatibility = 1.8
 
@@ -41,13 +53,98 @@ tasks.withType(FindBugs) {
 test {
     outputs.upToDateWhen { false }
     doFirst {
-        File reportDir=new File("cucumber-parallel-execution-results")
-        if(reportDir.exists()) {
+        File reportDir = new File("cucumber-parallel-execution-results")
+        if (reportDir.exists()) {
             reportDir.deleteDir()
         }
     }
     useTestNG() {
         useDefaultListeners = true
         suites 'src/test/resources/testng.xml'
+    }
+}
+
+task sourcesJar(type: Jar) {
+    from sourceSets.main.allSource
+    classifier = 'sources'
+}
+
+javadoc {
+    failOnError = false
+    source = sourceSets.main.allJava
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+def pomConfig = {
+    licenses {
+        license {
+            name "The Apache Software License, Version 2.0"
+            url "http://www.apache.org/licenses/LICENSE-2.0.txt"
+            distribution "automation-testing-util"
+        }
+    }
+    developers {
+        developer {
+            id "mrunalgosar"
+            name "Mrunal Gosar"
+            email "mrunalgosar@yahoo.in"
+        }
+    }
+
+    scm {
+        url "https://github.com/mrunalgosar/automation_testing_util.git"
+    }
+}
+
+publishing {
+    publications {
+        CustomPublication(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId 'com.in.automation.testing.util'
+            artifactId 'automation-testing-util'
+            version ver
+            pom.withXml {
+                def root = asNode()
+                root.appendNode('description', 'A collections of some utility classes and methods which can be used during automation testing.')
+                root.appendNode('name', 'automation-testing-util')
+                root.appendNode('url', 'https://github.com/mrunalgosar/automation_testing_util.git')
+                root.children().last() + pomConfig
+            }
+        }
+    }
+}
+
+bintray {
+    def properties = new Properties()
+    file('local.properties').withInputStream { properties.load(it) }
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    publications = ['CustomPublication']
+    pkg {
+        repo = 'automation-testing-util'
+        name = 'automation-testing-util' //YOUR PACKAGE NAME
+        desc = 'A collections of some utility classes and methods which can be used during automation testing.'
+        websiteUrl = 'https://github.com/mrunalgosar/automation_testing_util' // YOUR SITE
+        vcsUrl = 'https://github.com/mrunalgosar/automation_testing_util.git' // YOUR GIT REPO
+        version {
+            name = ver
+            desc = 'A collections of some utility classes and methods which can be used during automation testing.'
+            vcsTag = ver
+        }
+        licenses = ["Apache-2.0"] // A LIST OF YOUR LICENCES
+        publish = true
+        publicDownloadNumbers = true
     }
 }
