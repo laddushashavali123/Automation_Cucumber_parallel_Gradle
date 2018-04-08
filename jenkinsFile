@@ -1,15 +1,24 @@
 pipeline {
     agent any
     stages {
-        stage('Checkout Project From Git') {
+        stage('Checkout Project From Git and Prepare Workspace') {
             steps {
                 cleanWs()
                 checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'CleanBeforeCheckout']], submoduleCfg: [], userRemoteConfigs: [[credentialsId: 'b48e7780-1ae8-4806-a250-3b5a266927c1', url: 'https://github.com/mrunalgosar/automation_testing_util.git']]])
+                dir('I:\\ideaworkspace\\automation-testing-util') {
+                    fileOperations([fileCopyOperation(excludes: '', flattenFiles: false, includes: 'local.properties', targetLocation: "${WORKSPACE}")])
+                }
+                fileExists 'local.properties'
             }
         }
         stage('Gradle Run Test') {
             steps {
                 bat 'gradle test'
+            }
+            post {
+                always {
+                    cucumber fileIncludePattern: '*.json', jsonReportDirectory: 'cucumber-parallel-execution-results\\jsonCucumberResults', sortingMethod: 'ALPHABETICAL'
+                }
             }
         }
         stage('Publish Test Results') {
@@ -46,10 +55,10 @@ pipeline {
 				}
 			}
         }
-        stage('Publish Artifacts to JCenter') {
-            steps {
-                bat 'gradle bintray'
-            }
-        }
+		stage('Publish Artifacts to JCenter') {
+			steps {
+				bat 'gradle bintray'
+			}
+		}
     }
 }
